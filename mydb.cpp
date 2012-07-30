@@ -3,26 +3,25 @@
 MyDB::MyDB(int tamanio)
 {
     this->header.tamanio=tamanio;
-    this->SIZE_BITSMAP=this->getSizeBitsMap(tamanio);
 }
 void MyDB::setName(const char *nam){
     strcpy(this->header.name,nam);
 }
 
-void MyDB::setVersion(char *ver){
+void MyDB::setVersion(const char *ver){
     strcpy(this->header.version,ver);
 }
 
-void MyDB::setDate(char *date){
-    strcpy(this->header.date,date);
+void MyDB::setDate(const char *d){
+    strcpy(this->header.date,d);
 }
 
-void MyDB::setAuthors(char *authors){
+void MyDB::setAuthors(const char *authors){
     strcpy(this->header.authors,authors);
 }
 
-void MyDB::setModifyDate(char *date){
-    strcpy(this->header.modify_date,date);
+void MyDB::setModifyDate(const char *d){
+    strcpy(this->header.modify,d);
 }
 
 void MyDB::setStart_MD(int startpoint){
@@ -33,28 +32,46 @@ void MyDB::setSize_MD(int size){
     this->header.size_metaData=size;
 }
 int MyDB::creatDB(QString path){
+
     QFile *archivo=new QFile(path+".brdb");
     if(!archivo->open(QIODevice::ReadWrite))
         return 1;
     QString temp=this->getNameWithoutExtention(path);
-    qDebug()<<temp;
+
     this->setName(temp.toStdString().c_str());
-    QByteArray relleno(this->header.tamanio*1024*1024,'0');
-    archivo->write(relleno);
-    archivo->seek(0);
-    archivo->write(reinterpret_cast<char*>(&this->header),sizeof(Header));    
+    this->setVersion("1.1");
+    this->setAuthors("Frank");
+    this->setDate("06/89/23");
+    this->setModifyDate("23/23/12");
+    this->setStart_MD(20);
+    this->setSize_MD(100);
+    archivo->write(reinterpret_cast<char*>(&this->header),sizeof(Header));
+
+    char *veloz;
+
+    qDebug()<<this->header.name;
+    qDebug()<<this->header.tamanio;
+    qDebug()<<this->header.modify;
+    qDebug()<<this->header.date;
+    qDebug()<<sizeof(Header);
+    archivo->read(veloz,sizeof(Header));
+    qDebug()<<"\n\n";
+    qDebug()<<this->header.name;
+    qDebug()<<this->header.tamanio;
+    qDebug()<<this->header.modify;
+    qDebug()<<this->header.date;
+    Header valiz;
+    valiz=reinterpret_cast<Header&>(veloz);
+    qDebug()<<valiz.name;
+    qDebug()<<valiz.tamanio;
+    qDebug()<<valiz.modify;
+    qDebug()<<valiz.date;
     archivo->close();
     return 0;
-}
-int MyDB::math_homework(){
-    int blockCant=this->header.tamanio/this->SIZE_BLOCK;
-    return blockCant;
 }
 
 QString MyDB::getNameWithoutExtention(QString path){
     QStringList temp=path.split("/");
     return temp.at(temp.length()-1);
 }
-int MyDB::getSizeBitsMap(int tamanio){
-    return (tamanio*1024*1024*8/this->SIZE_BLOCK);
-}
+

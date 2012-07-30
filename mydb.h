@@ -24,18 +24,16 @@ public:
     Header header;
     BitsMap bitsmap;
     void setName(const char *nam);
-    void setVersion(char * ver);
-    void setDate(char *date);
-    void setModifyDate(char *date);
+    void setVersion(const char * ver);
+    void setDate(const char *d);
+    void setModifyDate(const char *d);
     void setStart_MD(int startpoint);
     void setSize_MD(int size);
-    void setAuthors(char *authors);
+    void setAuthors(const char *authors);
     int creatDB(QString path);
 
 private:
-    int math_homework();
     QString getNameWithoutExtention(QString path);
-    int getSizeBitsMap(int tamanio);
 
 
 };
