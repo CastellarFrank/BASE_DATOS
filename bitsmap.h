@@ -6,7 +6,7 @@ class BitsMap
 {
 public:
     BitsMap(); //Constructor vacio, no hace nada
-    QByteArray convertBitToByte(QBitArray array);
+    QByteArray convertBitToByte(QBitArray array); //Convierte el QBit de parámetro y lo regresa en un QByte
     QBitArray convertByteToBit(QByteArray array);
     QByteArray convertLocalBitToByte(bool &ok);
     QBitArray convertLocalByteToBit(bool &ok);
