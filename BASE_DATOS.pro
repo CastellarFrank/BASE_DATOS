@@ -13,10 +13,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     mydb.cpp \
-    header.cpp
+    header.cpp \
+    bitsmap.cpp
 
 HEADERS  += mainwindow.h \
     mydb.h \
-    header.h
+    header.h \
+    bitsmap.h
 
 FORMS    += mainwindow.ui
