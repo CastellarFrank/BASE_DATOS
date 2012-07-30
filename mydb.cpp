@@ -34,7 +34,7 @@ void MyDB::setSize_MD(int size){
 }
 int MyDB::creatDB(QString path){
     QFile *archivo=new QFile(path+".brdb");
-    if(!archivo->open(QIODevice::WriteOnly))
+    if(!archivo->open(QIODevice::ReadWrite))
         return 1;
     QString temp=this->getNameWithoutExtention(path);
     qDebug()<<temp;
@@ -42,7 +42,7 @@ int MyDB::creatDB(QString path){
     QByteArray relleno(this->header.tamanio*1024*1024,'0');
     archivo->write(relleno);
     archivo->seek(0);
-    archivo->write(reinterpret_cast<char*>(&this->header),sizeof(Header));
+    archivo->write(reinterpret_cast<char*>(&this->header),sizeof(Header));    
     archivo->close();
     return 0;
 }
