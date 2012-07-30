@@ -48,3 +48,11 @@ void BitsMap::setByteArray(QByteArray &array){
     this->bytes=array;
     this->activoByte=true;
 }
+
+QBitArray BitsMap::getLocalBit(){
+    return this->bits;
+}
+
+QByteArray BitsMap::getLocalByte(){
+    return this->bytes;
+}
