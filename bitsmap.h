@@ -8,8 +8,8 @@ public:
     BitsMap(); //Constructor vacio, no hace nada
     QByteArray convertBitToByte(QBitArray array);
     QBitArray convertByteToBit(QByteArray array);
-    QByteArray convertLocalBitToByte();
-    QBitArray convertLocalByteToBit();
+    QByteArray convertLocalBitToByte(bool &ok);
+    QBitArray convertLocalByteToBit(bool &ok);
     void setBitArray(QBitArray &array);
     void setByteArray(QByteArray &array);
 private:

@@ -20,12 +20,24 @@ QBitArray BitsMap::convertByteToBit(QByteArray array){
     return temp;
 }
 
-QByteArray BitsMap::convertLocalBitToByte(){
-    return (this->activoBit ? this->convertBitToByte(this->bits) : this->bytes);
+QByteArray BitsMap::convertLocalBitToByte(bool &ok){
+    if(this->activoBit){
+        ok=true;
+        return this->convertBitToByte(this->bits);
+    }else{
+        ok=false;
+        return this->bytes;
+    }
 }
 
-QBitArray BitsMap::convertLocalByteToBit(){
-    return (this->activoByte?this->convertByteToBit(this->bytes):this->bits);
+QBitArray BitsMap::convertLocalByteToBit(bool &ok){
+    if(this->activoByte){
+        ok=true;
+        return this->convertByteToBit(this->bytes);
+    }else{
+        ok=false;
+        return this->bits;
+    }
 }
 
 void BitsMap::setBitArray(QBitArray &array){
