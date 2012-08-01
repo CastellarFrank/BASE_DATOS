@@ -1,6 +1,6 @@
 #ifndef METADATA_H
 #define METADATA_H
-
+#include <stdio.h>
 class MetaData
 {
 public:
