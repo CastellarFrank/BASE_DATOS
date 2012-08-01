@@ -4,7 +4,7 @@
 class MetaData
 {
 public:
-    MetaData(char * nombre,char type, int primaryKey);//Hola a todos
+    MetaData(char * nombre,char type, int primaryKey);//Hola a todos esto solo es para probar
     char nombre[40];
     char type;
     char free;
