@@ -17,14 +17,15 @@ class MyDB
 {
 public:
     static const int SIZE_BLOCK=1024;
-    MyDB(int tamanio);
-    Header header;
-    BitsMap bitsmap;
-    int creatDB(QString path);
+    MyDB();
+    int createDB(int tamanio,QString path);
+    bool openDB(QString path);
 
 private:
     QString getNameWithoutExtention(QString path);
-    void mathHomeWork(int tam);
+    Header header;
+    BitsMap bitsmap;
+    int getBlockCant(int totalBytes,int divisorBytes);
 };
 
 #endif // MYDB_H

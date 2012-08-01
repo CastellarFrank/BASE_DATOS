@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     //w.show();
-    MyDB baseDatos(200);
+    MyDB baseDatos;
     QString path=QFileDialog::getSaveFileName(0,"Lala");
-    baseDatos.creatDB(path);
+    baseDatos.createDB(200,path);
     return 0;
 }
