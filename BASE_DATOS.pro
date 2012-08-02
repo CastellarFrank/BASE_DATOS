@@ -15,12 +15,12 @@ SOURCES += main.cpp\
     mydb.cpp \
     header.cpp \
     bitsmap.cpp \
-    metadata.cpp
+    metadatatable.cpp
 
 HEADERS  += mainwindow.h \
     mydb.h \
     header.h \
     bitsmap.h \
-    metadata.h
+    metadatatable.h
 
 FORMS    += mainwindow.ui
