@@ -2,6 +2,7 @@
 #define BITSMAP_H
 #include <QBitArray>
 #include <QByteArray>
+#include <QDebug>
 class BitsMap
 {
 public:
@@ -18,8 +19,11 @@ public:
     QByteArray getLocalByte(); //Regresa el QByte Cargado.
     void setBitArray(QBitArray &array); //Define cuál será el QBit a modificar
     void setByteArray(QByteArray &array); //Define cuál será el QByte a modificar.
-private:
+    void resizeBitsArray(int size);
+    void resizeBytesArray(int size);
+    int getBlockEmpty();
     QBitArray bits; //Arreglo QBit interno
+private:
     QByteArray bytes; //Arreglo QByte interno.
     bool activoByte; //Boolean para saber si se ha ingresado un QByte.
     bool activoBit; //Boolean para saber si se ha ingresado un QBit.

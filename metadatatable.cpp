@@ -1,10 +1,15 @@
 #include "metadatatable.h"
 
-MetaDataTable::MetaDataTable(char *nombre)
+MetaDataTable::MetaDataTable()
 {
     this->primaryKey=-1;
-    strcpy(this->nombre,nombre);
-    this->free=false;
+    this->cant_camp=0;
+    this->free='f';
+    this->pointerToFields=-1;
+    memset(this->nombre,0,25);
+    memset(this->descrip,0,40);
+    memset(this->fecha,0,12);
+
 }
 
 void MetaDataTable::setDescrip(char *d){

@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <QStringList>
 #include <iostream>
+#include <metadatatable.h>
 
 using namespace std;
 
@@ -17,6 +18,7 @@ class MyDB
 {
 public:
     static const int SIZE_BLOCK=1024;
+    int HEADER_SIZE;
     MyDB();
     int createDB(int tamanio,QString path);
     bool openDB(QString path);
@@ -26,6 +28,8 @@ private:
     Header header;
     BitsMap bitsmap;
     int getBlockCant(int totalBytes,int divisorBytes);
+    QList<MetaDataTable> metaDataTable;
+    QFile FileOpened;
 };
 
 #endif // MYDB_H
