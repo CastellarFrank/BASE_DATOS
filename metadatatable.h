@@ -9,12 +9,13 @@ public:
     MetaDataTable();
     char nombre[24];
     char fecha[12];
-    char descrip[28];
+    char descrip[40];
     short cant_camp;
     short primaryKey;
     short secondaryIndex;
     char free;
     int pointerToFields;
+
     Table_Pointers pointersData;
     Table_Pointers pointerArbolB;
     Table_Pointers pointerAVL;

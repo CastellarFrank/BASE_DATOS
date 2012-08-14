@@ -18,7 +18,6 @@ class MyDB
 {
 public:
     static const int SIZE_BLOCK=1024;
-    int HEADER_SIZE;
     MyDB();
     int createDB(int tamanio,QString path);
     bool openDB(QString path);
@@ -30,6 +29,9 @@ private:
     int getBlockCant(int totalBytes,int divisorBytes);
     QList<MetaDataTable> metaDataTable;
     QFile FileOpened;
+    void rellenar(int val,QFile &file);
+    int getByteSize(int BlocksCant);
+    bool crearTable(QString name,QString descrip,QString fecha);
 };
 
 #endif // MYDB_H

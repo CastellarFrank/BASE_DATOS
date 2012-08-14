@@ -1,5 +1,4 @@
 #include "bitsmap.h"
-
 BitsMap::BitsMap()
 {
 }
@@ -23,7 +22,7 @@ QBitArray BitsMap::convertByteToBit(QByteArray array){
 QByteArray BitsMap::convertLocalBitToByte(bool &ok){
     if(this->activoBit){
         ok=true;
-        for(int i=0;i<20;i++)
+        //for(int i=0;i<20;i++)
         return this->convertBitToByte(this->bits);
     }else{
         ok=false;
@@ -40,6 +39,7 @@ QBitArray BitsMap::convertLocalByteToBit(bool &ok){
         return this->bits;
     }
 }
+
 
 void BitsMap::setBitArray(QBitArray &array){
     this->bits=array;

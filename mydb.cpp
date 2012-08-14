@@ -2,7 +2,6 @@
 
 MyDB::MyDB()
 {
-    qDebug()<<sizeof(MetaDataTable);
 }
 
 int MyDB::createDB(int tamanio, QString path){
@@ -13,16 +12,29 @@ int MyDB::createDB(int tamanio, QString path){
     QString temp=this->getNameWithoutExtention(path);
     this->header.setName(const_cast<char*>(temp.toStdString().c_str()));
     this->header.setAuthors("Industrias BuenRecord");
+    qDebug()<<"Bytes Header"<<sizeof(Header);
+    this->header.countBlocksBitsMap=this->getBlockCant(tamanio*1024*1024,this->SIZE_BLOCK);
+    qDebug()<<"cantidad de bloques vacios"<<this->header.countBlocksBitsMap;
+    this->header.sizeBitsMap=this->header.countBlocksBitsMap/8;
+    qDebug()<<"Bytes del Bitsmap"<<this->header.sizeBitsMap;
+    this->header.start_metaData=sizeof(Header)+this->header.sizeBitsMap;
+    qDebug()<<"Byte donde inicia la metadata"<<this->header.start_metaData;
+    qDebug()<<"tamanio de la MetaDataTable"<<sizeof(MetaDataTable);
+    this->header.size_metaData=this->getBlockCant(50*sizeof(MetaDataTable),this->SIZE_BLOCK)*this->SIZE_BLOCK;
+    qDebug()<<"Size metadata"<<this->header.size_metaData;
+    this->header.rellenoMetadata=this->header.size_metaData-(50*sizeof(MetaDataTable));
+    qDebug()<<"relleno MetaData"<<this->header.rellenoMetadata;
+    this->header.all_Header_size=sizeof(Header)+this->header.sizeBitsMap+this->header.size_metaData;
     archivo.write(reinterpret_cast<char*>(&this->header),sizeof(Header));
-    int cantCasillas=this->getBlockCant(tamanio*1024*1024,this->SIZE_BLOCK);
-    QByteArray array(cantCasillas/8,'\0');
+    QByteArray array(this->header.sizeBitsMap,'\0');
     archivo.write(array);
     for(int i=0;i<50;i++){
         MetaDataTable metadat;
         archivo.write(reinterpret_cast<char *>(&metadat),sizeof(MetaDataTable));
     }    
-    this->HEADER_SIZE=archivo.size();
-    qDebug()<<HEADER_SIZE;
+    this->rellenar(this->header.rellenoMetadata,archivo);
+    qDebug()<<"xD"<<this->header.all_Header_size;
+    this->rellenar(this->header.countBlocksBitsMap*1024,archivo);
     archivo.close();
     return 0;
 }
@@ -32,7 +44,7 @@ QString MyDB::getNameWithoutExtention(QString path){
     return temp.at(temp.length()-1);
 }
 bool MyDB::openDB(QString path){
-    this->FileOpened.setFileName(path);;
+    this->FileOpened.setFileName(path);
     if(!this->FileOpened.open(QIODevice::ReadWrite)){
         return false;
     }
@@ -40,13 +52,16 @@ bool MyDB::openDB(QString path){
     qDebug()<<this->header.tamanio;
     qDebug()<<this->header.authors;
     this->FileOpened.read(reinterpret_cast<char*>(&this->header),sizeof(Header));
-    QByteArray bytes=this->FileOpened.read(this->header.tamanio*1024*1024/this->SIZE_BLOCK/8);
+    QByteArray bytes=this->FileOpened.read(this->header.sizeBitsMap);
     qDebug()<<bytes.count();
+    this->bitsmap.setBitArray(this->bitsmap.convertByteToBit(bytes));
     for(int i=0;i<50;i++){
         MetaDataTable temps;
         this->FileOpened.read(reinterpret_cast<char*>(&temps),sizeof(MetaDataTable));
         this->metaDataTable.push_back(temps);
     }
+    qDebug()<<this->header.all_Header_size<<"xd";
+    this->FileOpened.seek(this->header.all_Header_size);
     return true;
 }
 int MyDB::getBlockCant(int totalBytes, int divisorBytes){
@@ -56,5 +71,29 @@ int MyDB::getBlockCant(int totalBytes, int divisorBytes){
     }else{
         return (temp+1);
     }
+}
+
+void MyDB::rellenar(int val, QFile &file){
+    char temp[val];
+    memset(temp,0,val);
+    file.write(temp,val);
+}
+int MyDB::getByteSize(int BlocksCant){
+    return BlocksCant*this->SIZE_BLOCK;
+}
+bool MyDB::crearTable(QString name, QString descrip, QString fecha){
+    int pos=-1;
+    for(int i=0;i<this->metaDataTable.size();i++){
+        if(metaDataTable.at(i).free)
+            pos=i;
+    }
+    if(pos==-1)
+        return false;
+    this->metaDataTable.value(pos).setName(name.toStdString().c_str());
+    this->metaDataTable.value(pos).setDescrip(descrip.toStdString().c_str());
+    this->metaDataTable.value(pos).setFecha(fecha.toStdString().c_str());
+    this->metaDataTable.value(pos).free=false;
+    this->metaDataTable.value(pos).pointerToFields=this->bitsmap.getBlockEmpty();
+    return true;
 }
 

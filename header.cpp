@@ -7,10 +7,14 @@ Header::Header()
     memset(this->authors,0,208);
     memset(this->date,0,12);
     memset(this->modify,0,12);
-    memset(this->padding,0,468);
+    memset(this->padding,0,452);
     this->tamanio=0;
-    this->start_metaData=0;
+    this->all_Header_size=0;
+    this->start_metaData=-1;
     this->size_metaData=0;
+    this->countBlocksBitsMap=0;
+    this->sizeBitsMap=0;
+    this->rellenoMetadata=0;
 }
 
 void Header::setName(char *n){
