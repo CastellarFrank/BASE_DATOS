@@ -31,7 +31,7 @@ private:
     QFile FileOpened;
     void rellenar(int val,QFile &file);
     int getByteSize(int BlocksCant);
-    bool crearTable(QString name,QString descrip,QString fecha);
+    int crearTable(QString name,QString descrip,QString fecha);
 };
 
 #endif // MYDB_H

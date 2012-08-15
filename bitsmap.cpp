@@ -41,11 +41,11 @@ QBitArray BitsMap::convertLocalByteToBit(bool &ok){
 }
 
 
-void BitsMap::setBitArray(QBitArray &array){
+void BitsMap::setBitArray(QBitArray array){
     this->bits=array;
     this->activoBit=true;
 }
-void BitsMap::setByteArray(QByteArray &array){
+void BitsMap::setByteArray(QByteArray array){
     this->bytes=array;
     this->activoByte=true;
 }
@@ -73,4 +73,12 @@ void BitsMap::resizeBitsArray(int size){
 
 void BitsMap::resizeBytesArray(int size){
     this->bytes.resize(size);
+}
+void BitsMap::assignBitArray(QBitArray &array){
+    this->bits=array;
+    this->activoBit=true;
+}
+void BitsMap::assignByteArray(QByteArray &array){
+    this->bytes=array;
+    this->activoByte=true;
 }

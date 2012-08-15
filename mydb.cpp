@@ -74,26 +74,38 @@ int MyDB::getBlockCant(int totalBytes, int divisorBytes){
 }
 
 void MyDB::rellenar(int val, QFile &file){
-    char temp[val];
-    memset(temp,0,val);
-    file.write(temp,val);
+    int lim=val/this->SIZE_BLOCK;
+    int dif;
+    for(int i=0;i<lim;i++){
+        char temp[this->SIZE_BLOCK];
+        memset(temp,0,this->SIZE_BLOCK);
+        file.write(temp);
+    }
+    if(val%this->SIZE_BLOCK!=0){
+        dif=val-(this->SIZE_BLOCK*lim);
+        char temp[dif];
+        file.write(temp);
+    }
 }
 int MyDB::getByteSize(int BlocksCant){
     return BlocksCant*this->SIZE_BLOCK;
 }
-bool MyDB::crearTable(QString name, QString descrip, QString fecha){
+int MyDB::crearTable(QString name, QString descrip, QString fecha){
     int pos=-1;
     for(int i=0;i<this->metaDataTable.size();i++){
         if(metaDataTable.at(i).free)
             pos=i;
     }
     if(pos==-1)
-        return false;
-    this->metaDataTable.value(pos).setName(name.toStdString().c_str());
-    this->metaDataTable.value(pos).setDescrip(descrip.toStdString().c_str());
-    this->metaDataTable.value(pos).setFecha(fecha.toStdString().c_str());
+        return 1;
+    int emptyPos=this->bitsmap.getBlockEmpty();
+    if(emptyPos==-1)
+        return 2;
+    this->metaDataTable.value(pos).setName(const_cast<char*>(name.toStdString().c_str()));
+    this->metaDataTable.value(pos).setDescrip(const_cast<char*>(descrip.toStdString().c_str()));
+    this->metaDataTable.value(pos).setFecha(const_cast<char*>(fecha.toStdString().c_str()));
     this->metaDataTable.value(pos).free=false;
-    this->metaDataTable.value(pos).pointerToFields=this->bitsmap.getBlockEmpty();
-    return true;
+    this->metaDataTable.value(pos).pointerToFields=emptyPos;
+    return 0;
 }
 
