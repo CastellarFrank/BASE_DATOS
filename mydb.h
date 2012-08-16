@@ -11,6 +11,8 @@
 #include <QStringList>
 #include <iostream>
 #include <metadatatable.h>
+#include <table_medium.h>
+#include <table_control.h>
 
 using namespace std;
 
@@ -27,11 +29,13 @@ private:
     Header header;
     BitsMap bitsmap;
     int getBlockCant(int totalBytes,int divisorBytes);
-    QList<MetaDataTable> metaDataTable;
     QFile FileOpened;
     void rellenar(int val,QFile &file);
     int getByteSize(int BlocksCant);
-    int crearTable(QString name,QString descrip,QString fecha);
+    Table_Control tables_control;
+    int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
+
+
 };
 
 #endif // MYDB_H

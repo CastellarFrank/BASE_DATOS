@@ -55,10 +55,11 @@ bool MyDB::openDB(QString path){
     QByteArray bytes=this->FileOpened.read(this->header.sizeBitsMap);
     qDebug()<<bytes.count();
     this->bitsmap.setBitArray(this->bitsmap.convertByteToBit(bytes));
+    this->tables_control.clearAll();
     for(int i=0;i<50;i++){
         MetaDataTable temps;
         this->FileOpened.read(reinterpret_cast<char*>(&temps),sizeof(MetaDataTable));
-        this->metaDataTable.push_back(temps);
+        this->tables_control.metaData.push_back(temps);
     }
     qDebug()<<this->header.all_Header_size<<"xd";
     this->FileOpened.seek(this->header.all_Header_size);
@@ -90,22 +91,10 @@ void MyDB::rellenar(int val, QFile &file){
 int MyDB::getByteSize(int BlocksCant){
     return BlocksCant*this->SIZE_BLOCK;
 }
-int MyDB::crearTable(QString name, QString descrip, QString fecha){
-    int pos=-1;
-    for(int i=0;i<this->metaDataTable.size();i++){
-        if(metaDataTable.at(i).free)
-            pos=i;
-    }
-    if(pos==-1)
-        return 1;
-    int emptyPos=this->bitsmap.getBlockEmpty();
-    if(emptyPos==-1)
-        return 2;
-    this->metaDataTable.value(pos).setName(const_cast<char*>(name.toStdString().c_str()));
-    this->metaDataTable.value(pos).setDescrip(const_cast<char*>(descrip.toStdString().c_str()));
-    this->metaDataTable.value(pos).setFecha(const_cast<char*>(fecha.toStdString().c_str()));
-    this->metaDataTable.value(pos).free=false;
-    this->metaDataTable.value(pos).pointerToFields=emptyPos;
-    return 0;
+
+int MyDB::newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second){
+
+    return this->tables_control.crearTable(name,descrip,fecha,Field,key,second,this->bitsmap.getBlockEmpty());
 }
+
 

@@ -17,8 +17,9 @@ SOURCES += main.cpp\
     bitsmap.cpp \
     metadatatable.cpp \
     table_pointers.cpp \
-    table_medium.cpp \
-    field.cpp
+    field.cpp \
+    table_control.cpp \
+    table_fields.cpp
 
 HEADERS  += mainwindow.h \
     mydb.h \
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     bitsmap.h \
     metadatatable.h \
     table_pointers.h \
-    table_medium.h \
-    field.h
+    field.h \
+    table_control.h \
+    table_fields.h
 
 FORMS    += mainwindow.ui
