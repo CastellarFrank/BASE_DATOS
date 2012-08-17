@@ -29,3 +29,17 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     this->campos.insert(pos,Field);
     return 0;
 }
+void Table_Control::saveTablesInfo(QFile &archivo, int sizeBlock, int HeadSize){
+    for(int i=0;i<this->metaData.count();i++){
+        archivo.write(reinterpret_cast<char*>(&this->metaData.value(i)),sizeof(MetaDataTable));
+    }
+    QMap<int,Table_Fields>::ConstIterator it;
+    for(it=this->campos.constBegin();it!=this->campos.constEnd();it++){
+        Table_Fields tempField=it.value();
+        for(int i=0;i<tempField.campos.count();i++){
+            archivo.seek(HeadSize+this->metaData.at(it.key()).pointerToFields*sizeBlock);
+            archivo.write(reinterpret_cast<char*>(&tempField.campos.value(i)));
+        }
+    }
+
+}

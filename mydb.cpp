@@ -62,7 +62,6 @@ bool MyDB::openDB(QString path){
         this->tables_control.metaData.push_back(temps);
     }
     qDebug()<<this->header.all_Header_size<<"xd";
-    this->FileOpened.seek(this->header.all_Header_size);
     return true;
 }
 int MyDB::getBlockCant(int totalBytes, int divisorBytes){
@@ -95,6 +94,17 @@ int MyDB::getByteSize(int BlocksCant){
 int MyDB::newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second){
 
     return this->tables_control.crearTable(name,descrip,fecha,Field,key,second,this->bitsmap.getBlockEmpty());
+}
+
+void MyDB::save(){
+    this->writeHeader();
+    this->bitsmap.writeBitsMap(this->FileOpened);
+    this->tables_control.saveTablesInfo(this->FileOpened,this->SIZE_BLOCK,this->header.all_Header_size);
+    this->FileOpened.close();
+}
+void MyDB::writeHeader(){
+    this->FileOpened.seek(0);
+    this->FileOpened.write(reinterpret_cast<char*>(&this->header),sizeof(Header));
 }
 
 

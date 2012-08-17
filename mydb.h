@@ -20,6 +20,7 @@ class MyDB
 {
 public:
     static const int SIZE_BLOCK=1024;
+
     MyDB();
     int createDB(int tamanio,QString path);
     bool openDB(QString path);
@@ -34,6 +35,8 @@ private:
     int getByteSize(int BlocksCant);
     Table_Control tables_control;
     int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
+    void save();
+    void writeHeader();
 
 
 };

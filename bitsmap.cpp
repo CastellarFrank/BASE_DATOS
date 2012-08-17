@@ -82,3 +82,8 @@ void BitsMap::assignByteArray(QByteArray &array){
     this->bytes=array;
     this->activoByte=true;
 }
+
+void BitsMap::writeBitsMap(QFile &archivo){
+    this->bytes=this->convertBitToByte(this->bits);
+    archivo.write(bytes);
+}

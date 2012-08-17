@@ -3,6 +3,7 @@
 #include <QBitArray>
 #include <QByteArray>
 #include <QDebug>
+#include <QFile>
 class BitsMap
 {
 public:
@@ -24,6 +25,7 @@ public:
     void resizeBitsArray(int size);//Redimensiona o inicializa por así decirlo el BitArray interno
     void resizeBytesArray(int size);//Redimensiona o inicializa por asi ecirlo el ByteArray interno
     int getBlockEmpty(); //Retorna una posición libre del bitsmap o sino hay retorna -1
+    void writeBitsMap(QFile &archivo);
 private:
     QByteArray bytes; //Arreglo QByte interno.
     QBitArray bits; //Arreglo QBit interno
