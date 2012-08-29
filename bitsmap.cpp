@@ -1,5 +1,4 @@
 #include "bitsmap.h"
-
 BitsMap::BitsMap()
 {
 }
@@ -23,6 +22,7 @@ QBitArray BitsMap::convertByteToBit(QByteArray array){
 QByteArray BitsMap::convertLocalBitToByte(bool &ok){
     if(this->activoBit){
         ok=true;
+        //for(int i=0;i<20;i++)
         return this->convertBitToByte(this->bits);
     }else{
         ok=false;
@@ -40,11 +40,12 @@ QBitArray BitsMap::convertLocalByteToBit(bool &ok){
     }
 }
 
-void BitsMap::setBitArray(QBitArray &array){
+
+void BitsMap::setBitArray(QBitArray array){
     this->bits=array;
     this->activoBit=true;
 }
-void BitsMap::setByteArray(QByteArray &array){
+void BitsMap::setByteArray(QByteArray array){
     this->bytes=array;
     this->activoByte=true;
 }
@@ -55,4 +56,34 @@ QBitArray BitsMap::getLocalBit(){
 
 QByteArray BitsMap::getLocalByte(){
     return this->bytes;
+}
+
+int BitsMap::getBlockEmpty(){
+    for(int i=0;i<this->bits.size();i++){
+        if(!this->bits.at(i)){
+            this->bits[i]=true;
+            return i;
+        }
+    }
+    return -1;
+}
+void BitsMap::resizeBitsArray(int size){
+    this->bits.resize(size);
+}
+
+void BitsMap::resizeBytesArray(int size){
+    this->bytes.resize(size);
+}
+void BitsMap::assignBitArray(QBitArray &array){
+    this->bits=array;
+    this->activoBit=true;
+}
+void BitsMap::assignByteArray(QByteArray &array){
+    this->bytes=array;
+    this->activoByte=true;
+}
+
+void BitsMap::writeBitsMap(QFile &archivo){
+    this->bytes=this->convertBitToByte(this->bits);
+    archivo.write(bytes);
 }
