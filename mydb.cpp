@@ -59,7 +59,19 @@ bool MyDB::openDB(QString path){
     for(int i=0;i<50;i++){
         MetaDataTable temps;
         this->FileOpened.read(reinterpret_cast<char*>(&temps),sizeof(MetaDataTable));
+        int postemp=this->FileOpened.pos();
+        Table_Fields fieldTemp;
+        for(int e=0;e<temps.cant_camp;e++){
+            Field ftemp;
+            qDebug()<<"Size:"<<this->header.all_Header_size+temps.pointerToFields*this->SIZE_BLOCK+(e*sizeof(Field));
+            this->FileOpened.seek(this->header.all_Header_size+temps.pointerToFields*this->SIZE_BLOCK+(e*sizeof(Field)));
+            this->FileOpened.read(reinterpret_cast<char*>(&ftemp),sizeof(Field));
+            qDebug()<<ftemp.name<<FileOpened.pos()<<i<<e;
+            fieldTemp.campos.push_back(ftemp);
+        }
         this->tables_control.metaData.push_back(temps);
+        this->tables_control.loadedFields.push_back(fieldTemp);
+        this->FileOpened.seek(postemp);
     }
     qDebug()<<this->header.all_Header_size<<"xd";
     return true;

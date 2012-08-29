@@ -2,6 +2,10 @@
 
 Field::Field()
 {
+    memset(this->name,0,24);
+    this->type='n';
+    this->nulo='f';
+    this->size=0;
 }
 
 Field::Field(char *name, char t, int size, char n){

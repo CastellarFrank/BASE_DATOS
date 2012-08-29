@@ -9,7 +9,7 @@ class Field
 public:
     Field();
     Field(char *name,char t,int size,char n);
-    char name[25];
+    char name[24];
     char type;
     int size;
     char nulo;

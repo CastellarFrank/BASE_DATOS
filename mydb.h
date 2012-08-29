@@ -11,7 +11,6 @@
 #include <QStringList>
 #include <iostream>
 #include <metadatatable.h>
-#include <table_medium.h>
 #include <table_control.h>
 
 using namespace std;
@@ -24,7 +23,9 @@ public:
     MyDB();
     int createDB(int tamanio,QString path);
     bool openDB(QString path);
-
+    Table_Control tables_control;
+    int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
+    void save();
 private:
     QString getNameWithoutExtention(QString path);
     Header header;
@@ -33,12 +34,7 @@ private:
     QFile FileOpened;
     void rellenar(int val,QFile &file);
     int getByteSize(int BlocksCant);
-    Table_Control tables_control;
-    int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
-    void save();
     void writeHeader();
-
-
 };
 
 #endif // MYDB_H

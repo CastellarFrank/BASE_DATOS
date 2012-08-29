@@ -8,7 +8,7 @@ class Table_Fields
 public:
     Table_Fields();
     QList<Field> campos;
-    void addCampo(char* name,char t,int size, bool);
+    int addCampo(char* name,char t,int size, bool);
 };
 
 #endif // TABLE_FIELDS_H
