@@ -6,7 +6,8 @@ MetaDataTable::MetaDataTable()
     this->cant_camp=0;
     this->free='f';
     this->pointerToFields=-1;
-    memset(this->nombre,0,25);
+    this->nextDataFree=-1;
+    memset(this->nombre,0,24);
     memset(this->descrip,0,40);
     memset(this->fecha,0,12);
 

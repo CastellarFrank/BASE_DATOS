@@ -16,13 +16,21 @@ SOURCES += main.cpp\
     header.cpp \
     bitsmap.cpp \
     metadatatable.cpp \
-    table_pointers.cpp
+    table_pointers.cpp \
+    field.cpp \
+    table_control.cpp \
+    table_fields.cpp \
+    table.cpp
 
 HEADERS  += mainwindow.h \
     mydb.h \
     header.h \
     bitsmap.h \
     metadatatable.h \
-    table_pointers.h
+    table_pointers.h \
+    field.h \
+    table_control.h \
+    table_fields.h \
+    table.h
 
 FORMS    += mainwindow.ui

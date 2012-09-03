@@ -9,15 +9,17 @@ public:
     MetaDataTable();
     char nombre[24];
     char fecha[12];
-    char descrip[28];
+    char descrip[40];
     short cant_camp;
     short primaryKey;
     short secondaryIndex;
     char free;
     int pointerToFields;
+    int nextDataFree;
+
     Table_Pointers pointersData;
     Table_Pointers pointerArbolB;
-    Table_Pointers pointerAVL;
+    Table_Pointers pointerIS;
     Table_Pointers pointerInvertedList;
 
     void setName(char * n);
