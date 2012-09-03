@@ -22,6 +22,7 @@ private:
     int secondary;
     int cant_camp;
     int num_table;
+    int registerCant;
     BitsMap bitsmap;
 };
 

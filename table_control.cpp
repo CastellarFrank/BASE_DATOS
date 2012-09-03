@@ -36,20 +36,21 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     this->metaData[pos].primaryKey=key;
     this->metaData[pos].secondaryIndex=second;
     this->campos.insert(pos,Field);
+    this->createFirstDirectsData(pos);
     return 0;
 }
-void Table_Control::saveTablesInfo(QFile &archivo, int sizeBlock, int HeadSize,int startMeta){
+void Table_Control::saveTablesInfo(){
     qDebug()<<"Cantidad campo to save:"<<this->campos.count();
     QMap<int,Table_Fields>::ConstIterator it;
     for(it=this->campos.constBegin();it!=this->campos.constEnd();it++){
-        archivo.seek(startMeta+(it.key()*sizeof(MetaDataTable)));
-        archivo.write(reinterpret_cast<char*>(&this->metaData[it.key()]),sizeof(MetaDataTable));
+        this->fileOpened->seek(this->header.start_metaData+(it.key()*sizeof(MetaDataTable)));
+        this->fileOpened->write(reinterpret_cast<char*>(&this->metaData[it.key()]),sizeof(MetaDataTable));
         Table_Fields tempField=it.value();
-        archivo.seek(HeadSize+this->metaData.at(it.key()).pointerToFields*sizeBlock);
-        qDebug()<<archivo.pos();
+        this->fileOpened->seek(this->header.all_Header_size+this->metaData.at(it.key()).pointerToFields*1024);
+        qDebug()<<this->fileOpened->pos();
         for(int i=0;i<tempField.campos.count();i++){
-            qDebug()<<tempField.campos[i].name<<i<<HeadSize+this->metaData.at(it.key()).pointerToFields*sizeBlock+(i*sizeof(Field))<<it.key()<<this->metaData.at(it.key()).pointerToFields*sizeBlock;
-            archivo.write(reinterpret_cast<char*>(&tempField.campos[i]),sizeof(Field));
+            qDebug()<<tempField.campos[i].name<<i<<this->header.all_Header_size+this->metaData.at(it.key()).pointerToFields*1024+(i*sizeof(Field))<<it.key()<<this->metaData.at(it.key()).pointerToFields*1024;
+            this->fileOpened->write(reinterpret_cast<char*>(&tempField.campos[i]),sizeof(Field));
         }
     }
     this->campos.clear();
@@ -64,4 +65,26 @@ void Table_Control::openTable(int num){
 }
 void Table_Control::setBitsMap(BitsMap &bits){
     this->bitsmap=bits;
+}
+void Table_Control::createFirstDirectsData(int pos){
+    Table_Fields temp=this->campos.value(pos);
+    int registerCant=1024/temp.RegisterSize;
+    this->metaData[pos].nextDataFree=0;
+    this->fileOpened->seek(this->header.all_Header_size+this->metaData[pos].pointersData.direct1*1024);
+    for(int i=0;i<registerCant;i++){
+        char bytes[temp.RegisterSize];
+        memset(bytes,0,temp.RegisterSize);
+        QByteArray block;
+        QDataStream val(&block, QIODevice::WriteOnly);
+        val.setVersion(QDataStream::Qt_4_6);
+        val<<bytes;
+        val<<(i+1);
+        this->fileOpened->write(block);
+    }
+}
+void Table_Control::setFile(QFile *f){
+    this->fileOpened=f;
+}
+void Table_Control::setHeader(Header &h){
+    this->header=h;
 }

@@ -11,6 +11,7 @@ Table::Table(int num,int pointer, int key, int second, int cant)
 
 void Table::setFields(Table_Fields fields){
     this->campos=fields;
+    this->registerCant=1024/fields.RegisterSize;
 }
 void Table::setPointers(Table_Pointers pointData, Table_Pointers pointArb, Table_Pointers pointIS, Table_Pointers pointInvert){
     this->pointersData=pointData;
@@ -21,3 +22,4 @@ void Table::setPointers(Table_Pointers pointData, Table_Pointers pointArb, Table
 void Table::setBitsMap(BitsMap &bits){
     this->bitsmap=bits;
 }
+

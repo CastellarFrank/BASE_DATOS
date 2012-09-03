@@ -7,7 +7,9 @@
 #include <QString>
 #include <QFile>
 #include <table.h>
+#include <header.h>
 #include <bitsmap.h>
+#include <QDataStream>
 
 
 class Table_Control
@@ -18,16 +20,20 @@ public:
     Table_Control();
     void clearAll();
     int crearTable(QString name, QString descrip, QString fecha,Table_Fields Field,int key,int second);
-    void saveTablesInfo(QFile &archivo,int sizeBlock,int HeadSize,int startMeta);
+    void saveTablesInfo();
     void openTable(int num);
     void closeTable();
     void setBitsMap(BitsMap &bits);
-
+    void setFile(QFile *f);
+    void setHeader(Header &h);
 
 private:
     QMap<int,Table_Fields> campos;
     Table *tableOpened;
     BitsMap bitsmap;
+    QFile *fileOpened;
+    Header header;
+    void createFirstDirectsData(int pos);
 };
 
 #endif // TABLE_CONTROL_H

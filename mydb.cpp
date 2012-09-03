@@ -74,6 +74,8 @@ bool MyDB::openDB(QString path){
         this->FileOpened.seek(postemp);
     }
     this->tables_control.setBitsMap(this->bitsmap);
+    this->tables_control.setFile(&this->FileOpened);
+    this->tables_control.setHeader(this->header);
     qDebug()<<this->header.all_Header_size<<"xd";
     return true;
 }
@@ -112,7 +114,7 @@ int MyDB::newTable(QString name, QString descrip, QString fecha, Table_Fields Fi
 void MyDB::save(){
     this->writeHeader();
     this->bitsmap.writeBitsMap(this->FileOpened);
-    this->tables_control.saveTablesInfo(this->FileOpened,this->SIZE_BLOCK,this->header.all_Header_size,this->header.start_metaData);
+    this->tables_control.saveTablesInfo();
     this->FileOpened.close();
 }
 void MyDB::writeHeader(){
