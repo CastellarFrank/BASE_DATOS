@@ -15,10 +15,11 @@ public:
     short secondaryIndex;
     char free;
     int pointerToFields;
+    int nextDataFree;
 
     Table_Pointers pointersData;
     Table_Pointers pointerArbolB;
-    Table_Pointers pointerAVL;
+    Table_Pointers pointerIS;
     Table_Pointers pointerInvertedList;
 
     void setName(char * n);

@@ -9,6 +9,7 @@ public:
     Table_Fields();
     QList<Field> campos;
     int addCampo(char* name,char t,int size, bool);
+    int RegisterSize;
 };
 
 #endif // TABLE_FIELDS_H

@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     table_pointers.cpp \
     field.cpp \
     table_control.cpp \
-    table_fields.cpp
+    table_fields.cpp \
+    table.cpp
 
 HEADERS  += mainwindow.h \
     mydb.h \
@@ -29,6 +30,7 @@ HEADERS  += mainwindow.h \
     table_pointers.h \
     field.h \
     table_control.h \
-    table_fields.h
+    table_fields.h \
+    table.h
 
 FORMS    += mainwindow.ui

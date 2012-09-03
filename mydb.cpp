@@ -73,6 +73,7 @@ bool MyDB::openDB(QString path){
         this->tables_control.loadedFields.push_back(fieldTemp);
         this->FileOpened.seek(postemp);
     }
+    this->tables_control.setBitsMap(this->bitsmap);
     qDebug()<<this->header.all_Header_size<<"xd";
     return true;
 }
@@ -105,13 +106,13 @@ int MyDB::getByteSize(int BlocksCant){
 
 int MyDB::newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second){
 
-    return this->tables_control.crearTable(name,descrip,fecha,Field,key,second,this->bitsmap.getBlockEmpty());
+    return this->tables_control.crearTable(name,descrip,fecha,Field,key,second);
 }
 
 void MyDB::save(){
     this->writeHeader();
     this->bitsmap.writeBitsMap(this->FileOpened);
-    this->tables_control.saveTablesInfo(this->FileOpened,this->SIZE_BLOCK,this->header.all_Header_size);
+    this->tables_control.saveTablesInfo(this->FileOpened,this->SIZE_BLOCK,this->header.all_Header_size,this->header.start_metaData);
     this->FileOpened.close();
 }
 void MyDB::writeHeader(){
