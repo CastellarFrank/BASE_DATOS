@@ -30,8 +30,6 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     this->metaData[pos].free=false;
     this->metaData[pos].pointerToFields=blockEmpty;
     this->metaData[pos].pointersData.direct1=bitsmap.getBlockEmpty();
-    this->metaData[pos].pointersData.direct2=bitsmap.getBlockEmpty();
-    this->metaData[pos].pointersData.direct3=bitsmap.getBlockEmpty();
     this->metaData[pos].cant_camp=Field.campos.count();
     this->metaData[pos].primaryKey=key;
     this->metaData[pos].secondaryIndex=second;
@@ -72,13 +70,13 @@ void Table_Control::createFirstDirectsData(int pos){
     this->metaData[pos].nextDataFree=0;
     this->fileOpened->seek(this->header.all_Header_size+this->metaData[pos].pointersData.direct1*1024);
     for(int i=0;i<registerCant;i++){
-        char bytes[temp.RegisterSize];
-        memset(bytes,0,temp.RegisterSize);
         QByteArray block;
         QDataStream val(&block, QIODevice::WriteOnly);
         val.setVersion(QDataStream::Qt_4_6);
+        QString bytes;
+        bytes.fill(0,temp.RegisterSize);
         val<<bytes;
-        val<<(i+1);
+        val<<quint32(i+1);
         this->fileOpened->write(block);
     }
 }

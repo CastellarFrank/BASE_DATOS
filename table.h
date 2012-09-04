@@ -15,7 +15,6 @@ public:
     void setFile(QFile *file);
     void setHeader(Header &head);
     int addRegister(QByteArray info);
-
     int validateAndCreateDataSpace(int val);
 private:
     Table_Fields listFields;
