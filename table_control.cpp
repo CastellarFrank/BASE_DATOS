@@ -59,6 +59,9 @@ void Table_Control::saveTablesInfo(){
 void Table_Control::openTable(int num){
     this->saveTablesInfo();
     this->tableOpened=new Table(num,this->metaData[num],this->loadedFields[num]);
+    this->tableOpened->setBitsMap(this->bitsmap);
+    this->tableOpened->setFile(this->fileOpened);
+    this->tableOpened->setHeader(this->header);
 }
 void Table_Control::setBitsMap(BitsMap &bits){
     this->bitsmap=bits;
