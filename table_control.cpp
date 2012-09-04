@@ -43,6 +43,7 @@ void Table_Control::saveTablesInfo(){
     qDebug()<<"Cantidad campo to save:"<<this->campos.count();
     QMap<int,Table_Fields>::ConstIterator it;
     for(it=this->campos.constBegin();it!=this->campos.constEnd();it++){
+        this->loadedFields[it.key()]=it.value();
         this->fileOpened->seek(this->header.start_metaData+(it.key()*sizeof(MetaDataTable)));
         this->fileOpened->write(reinterpret_cast<char*>(&this->metaData[it.key()]),sizeof(MetaDataTable));
         Table_Fields tempField=it.value();
@@ -56,12 +57,8 @@ void Table_Control::saveTablesInfo(){
     this->campos.clear();
 }
 void Table_Control::openTable(int num){
-    this->tableOpened=new Table(num,this->metaData[num].pointerToFields,this->metaData[num].primaryKey,
-                                this->metaData[num].secondaryIndex,this->metaData[num].cant_camp);
-    this->tableOpened->setPointers(this->metaData[num].pointersData,this->metaData[num].pointerArbolB,
-                                   this->metaData[num].pointerIS,this->metaData[num].pointerInvertedList);
-    this->tableOpened->setBitsMap(this->bitsmap);
-    this->tableOpened->setFields(this->loadedFields[num]);
+    this->saveTablesInfo();
+    this->tableOpened=new Table(num,this->metaData[num],this->loadedFields[num]);
 }
 void Table_Control::setBitsMap(BitsMap &bits){
     this->bitsmap=bits;

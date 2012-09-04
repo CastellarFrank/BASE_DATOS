@@ -3,24 +3,16 @@
 #include <table_pointers.h>
 #include <table_fields.h>
 #include <bitsmap.h>
+#include <metadatatable.h>
 
 class Table
 {
 public:
-    Table(int num,int pointer,int key,int second,int cant);
-    void setPointers(Table_Pointers pointData,Table_Pointers pointArb,Table_Pointers pointIS, Table_Pointers pointInvert);
-    void setFields(Table_Fields fields);
+    Table(int num,MetaDataTable meta,Table_Fields cam);
     void setBitsMap(BitsMap &bits);
 private:
     Table_Fields campos;
-    Table_Pointers pointersData;
-    Table_Pointers pointerArbolB;
-    Table_Pointers pointerIS;
-    Table_Pointers pointerInvertedList;
-    int pointerToFields;
-    int key;
-    int secondary;
-    int cant_camp;
+    MetaDataTable metaData;
     int num_table;
     int registerCant;
     BitsMap bitsmap;

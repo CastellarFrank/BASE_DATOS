@@ -1,24 +1,13 @@
 #include "table.h"
 
-Table::Table(int num,int pointer, int key, int second, int cant)
+Table::Table(int num, MetaDataTable meta, Table_Fields cam)
 {
-    this->pointerToFields=pointer;
-    this->key=key;
-    this->secondary=second;
-    this->cant_camp=cant;
     this->num_table=num;
+    this->metaData=meta;
+    this->campos=cam;
+    this->registerCant=1024/campos.RegisterSize;
 }
 
-void Table::setFields(Table_Fields fields){
-    this->campos=fields;
-    this->registerCant=1024/fields.RegisterSize;
-}
-void Table::setPointers(Table_Pointers pointData, Table_Pointers pointArb, Table_Pointers pointIS, Table_Pointers pointInvert){
-    this->pointersData=pointData;
-    this->pointerArbolB=pointArb;
-    this->pointerIS=pointIS;
-    this->pointerInvertedList=pointInvert;
-}
 void Table::setBitsMap(BitsMap &bits){
     this->bitsmap=bits;
 }
