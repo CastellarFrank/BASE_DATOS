@@ -23,6 +23,7 @@ int Table::addRegister(QByteArray info){
     num=-1;
     info.append(reinterpret_cast<char*>(&num),sizeof(int));
     this->fileOpened->write(info);
+    return 0;
 }
 
 void Table::setFile(QFile *file){
