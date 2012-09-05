@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     //w.show();
     MyDB baseDatos;
     QString path=QFileDialog::getSaveFileName(0,"Lala");
-    baseDatos.createDB(200,path);
+    baseDatos.createDB(100,path);
     path=QFileDialog::getOpenFileName(0,"Lolo");
     baseDatos.openDB(path);
 

@@ -15,7 +15,6 @@ public:
     void setFile(QFile *file);
     void setHeader(Header &head);
     int addRegister(QByteArray info);
-    int validateAndCreateDataSpace(int val);
 private:
     Table_Fields listFields;
     MetaDataTable metaData;
@@ -24,6 +23,8 @@ private:
     BitsMap bitsmap;
     QFile *fileOpened;
     Header header;
+    int getBytesPositionToWriteRegister(int val);
+    void fullBlockWithRegister(int blockNum);
 };
 
 #endif // TABLE_H

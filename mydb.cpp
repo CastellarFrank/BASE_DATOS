@@ -34,6 +34,7 @@ int MyDB::createDB(int tamanio, QString path){
     }    
     this->rellenar(this->header.rellenoMetadata,archivo);
     qDebug()<<"xD"<<this->header.all_Header_size;
+    qDebug()<<"size"<<this->header.countBlocksBitsMap;
     this->rellenar(this->header.countBlocksBitsMap*1024,archivo);
     archivo.close();
     return 0;
@@ -92,14 +93,14 @@ void MyDB::rellenar(int val, QFile &file){
     int lim=val/this->SIZE_BLOCK;
     int dif;
     for(int i=0;i<lim;i++){
-        char temp[this->SIZE_BLOCK];
-        memset(temp,0,this->SIZE_BLOCK);
-        file.write(temp);
+        QByteArray b(this->SIZE_BLOCK,'\0');
+        file.write(b);
     }
     if(val%this->SIZE_BLOCK!=0){
         dif=val-(this->SIZE_BLOCK*lim);
         char temp[dif];
-        file.write(temp);
+        memset(temp,0,dif);
+        file.write(reinterpret_cast<char*>(&temp),dif);
     }
 }
 int MyDB::getByteSize(int BlocksCant){

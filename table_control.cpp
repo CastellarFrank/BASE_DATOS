@@ -71,12 +71,11 @@ void Table_Control::createFirstDirectsData(int pos){
     this->fileOpened->seek(this->header.all_Header_size+this->metaData[pos].pointersData.direct1*1024);
     for(int i=0;i<registerCant;i++){
         QByteArray block;
-        QDataStream val(&block, QIODevice::WriteOnly);
-        val.setVersion(QDataStream::Qt_4_6);
         QString bytes;
-        bytes.fill(0,temp.RegisterSize);
-        val<<bytes;
-        val<<quint32(i+1);
+        bytes.fill('\0',temp.RegisterSize);
+        block.append(bytes);
+        int num=i+1;
+        block.append(reinterpret_cast<char*>(&num),sizeof(int));
         this->fileOpened->write(block);
     }
 }
