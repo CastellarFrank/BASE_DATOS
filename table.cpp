@@ -32,6 +32,7 @@ void Table::setFile(QFile *file){
 int Table::getBytesPositionToWriteRegister(int val){
     bool nuevo=true;
     int pointer;
+    int iFile;
     if(val==0){
         nuevo=false;
         pointer=this->metaData.pointersData.direct1;
@@ -49,6 +50,27 @@ int Table::getBytesPositionToWriteRegister(int val){
             nuevo=false;
         }
         pointer=this->metaData.pointersData.direct3;
+    }else{
+        iFile=(val-3)/(1024/sizeof(int));
+        if(iFile==0){
+            if(this->metaData.pointersData.no_directN10==-1){
+                //crearListApuntadores pidiendo un nuevo bloque al bitsmap writePointerList(getBlockEmpty);
+            }
+            int pos=this->header.all_Header_size+
+                    (this->metaData.pointersData.no_directN10*1024)+
+                    ((val-1)*sizeof(int));
+            this->fileOpened->seek(pos);
+            int tempN;
+            this->fileOpened->read(reinterpret_cast<char*>(&tempN),sizeof(int));
+            if(tempN==-1){
+                tempN=this->bitsmap.getBlockEmpty();
+                this->fileOpened->seek(pos);
+                this->fileOpened->write(reinterpret_cast<char*>(&tempN),sizeof(int));
+            }else{
+                nuevo=false;
+            }
+            pointer=tempN;
+        }
     }
     if(nuevo)
         this->fullBlockWithRegister(pointer);
