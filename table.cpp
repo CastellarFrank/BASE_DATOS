@@ -58,7 +58,7 @@ int Table::getBytesPositionToWriteRegister(int val){
             }
             int pos=this->header.all_Header_size+
                     (this->metaData.pointersData.no_directN10*1024)+
-                    ((val-1)*sizeof(int));
+                    ((val-3-(iFile*(1024/sizeof(int))))*sizeof(int));
             this->fileOpened->seek(pos);
             int tempN;
             this->fileOpened->read(reinterpret_cast<char*>(&tempN),sizeof(int));
