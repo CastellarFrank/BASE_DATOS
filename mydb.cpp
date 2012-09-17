@@ -55,7 +55,13 @@ bool MyDB::openDB(QString path){
     this->FileOpened.read(reinterpret_cast<char*>(&this->header),sizeof(Header));
     QByteArray bytes=this->FileOpened.read(this->header.sizeBitsMap);
     qDebug()<<bytes.count();
-    this->bitsmap.setBitArray(this->bitsmap.convertByteToBit(bytes));
+    this->bitsmap.setBitArray((this->bitsmap.convertByteToBit(bytes)));
+    qDebug()<<this->bitsmap.bits->at(0);
+    qDebug()<<this->bitsmap.bits->at(2);
+    qDebug()<<this->bitsmap.bits->at(3);
+    qDebug()<<this->bitsmap.bits->at(4);
+    qDebug()<<this->bitsmap.bits->at(5);
+    qDebug()<<this->bitsmap.bits->at(6);
     this->tables_control.clearAll();
     for(int i=0;i<50;i++){
         MetaDataTable temps;
@@ -74,7 +80,8 @@ bool MyDB::openDB(QString path){
         this->tables_control.loadedFields.push_back(fieldTemp);
         this->FileOpened.seek(postemp);
     }
-    this->tables_control.setBitsMap(this->bitsmap);
+    this->bitsmap.setFile(&this->FileOpened);
+    this->tables_control.setBitsMap(this->bitsmap.bits);
     this->tables_control.setFile(&this->FileOpened);
     this->tables_control.setHeader(this->header);
     qDebug()<<this->header.all_Header_size<<"xd";
@@ -114,7 +121,7 @@ int MyDB::newTable(QString name, QString descrip, QString fecha, Table_Fields Fi
 
 void MyDB::save(){
     this->writeHeader();
-    this->bitsmap.writeBitsMap(this->FileOpened);
+    this->bitsmap.writeBitsMap();
     this->tables_control.saveTablesInfo();
     this->FileOpened.close();
 }

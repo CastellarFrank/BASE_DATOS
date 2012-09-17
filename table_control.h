@@ -23,17 +23,18 @@ public:
     void saveTablesInfo();
     void openTable(int num);
     void closeTable();
-    void setBitsMap(BitsMap &bits);
+    void setBitsMap(QBitArray *bits);
     void setFile(QFile *f);
     void setHeader(Header &h);
+    Table *tableOpened;
 
 private:
     QMap<int,Table_Fields> campos;
-    Table *tableOpened;
     BitsMap bitsmap;
     QFile *fileOpened;
     Header header;
     void createFirstDirectsData(int pos);
+    void writeMetaDataTable(int num);
 };
 
 #endif // TABLE_CONTROL_H

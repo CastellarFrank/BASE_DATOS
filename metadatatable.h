@@ -11,6 +11,8 @@ public:
     char fecha[12];
     char descrip[40];
     short cant_camp;
+    short register_size;
+    int register_cant;
     short primaryKey;
     short secondaryIndex;
     char free;

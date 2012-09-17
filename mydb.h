@@ -25,11 +25,11 @@ public:
     bool openDB(QString path);
     Table_Control tables_control;
     int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
+    BitsMap bitsmap;
     void save();
 private:
     QString getNameWithoutExtention(QString path);
     Header header;
-    BitsMap bitsmap;
     int getBlockCant(int totalBytes,int divisorBytes);
     QFile FileOpened;
     void rellenar(int val,QFile &file);
