@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         lista.push_back(temp);
         temp="Rubbo"+convert.setNum(i+1);
         lista.push_back(temp);
-        char lolo=i+65;
+        char lolo=(i%255);
         temp=QString(QChar(lolo));
         lista.push_back(temp);
         baseDatos.tables_control.tableOpened->addRegister(lista);
@@ -101,6 +101,14 @@ int main(int argc, char *argv[])
     }
     baseDatos.tables_control.tableOpened->addAllRegistersToFile();
     qDebug()<<"SALVADA SEGUNDA PARTE";
+
+    for(int i=0;i<20;i++){
+        qDebug()<<"Mostraado Registro #"<<i;
+        QStringList tempList=baseDatos.tables_control.tableOpened->getRegister(i);
+        for(int i=0;i<tempList.count();i++){
+            qDebug()<<"\t"<<tempList.at(i);
+        }
+    }
     baseDatos.tables_control.closeTable();
     baseDatos.save();
 

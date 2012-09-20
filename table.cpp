@@ -282,7 +282,7 @@ int Table::getPositionRegister(int num){
     }else if(file==2){
         pointerToFile=this->metaData->pointersData.direct3;
     }else{
-        nFile=(file-3)/(1024/sizeof(int));
+        nfile=(file-3)/(1024/sizeof(int));
         if(nfile==0){
             if(this->metaData->pointersData.no_directN10==-1)
                 return -1;
@@ -339,14 +339,31 @@ QStringList Table::convertQByteToStringList(QByteArray array){
             char c;
             memcpy(&c,array,1);
             array.remove(0,1);
+            QChar cV(c);
+            QString valS(cV);
+            fieldConverted=valS;
         }else if(this->listFields.campos.at(i).type=='i'){
             int val;
             memcpy(&val,array,sizeof(int));
             array.remove(0,sizeof(int));
+            QString valS;
+            fieldConverted=valS.setNum(val);
         }else if(this->listFields.campos.at(i).type=='f'){
             float val;
             memcpy(&val,array,sizeof(float));
             array.remove(0,sizeof(float));
+            QString valS;
+            fieldConverted=valS.setNum(val);
+        }else if(this->listFields.campos.at(i).type=='d'){
+            QString valS(array.left(this->listFields.campos.at(i).size));
+            array.remove(0,this->listFields.campos.at(i).size);
+            fieldConverted=valS;
+        }else if(this->listFields.campos.at(i).type=='s'){
+            QString valS(array.left(this->listFields.campos.at(i).size));
+            array.remove(0,this->listFields.campos.at(i).size);
+            fieldConverted=valS;
         }
+        temp.push_back(fieldConverted);
     }
+    return temp;
 }
