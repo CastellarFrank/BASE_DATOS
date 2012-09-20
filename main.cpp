@@ -22,13 +22,13 @@ int main(int argc, char *argv[])
     field.addCampo("Nombre",'s',25,'f');
     field.addCampo("Apellido",'s',30,'f');
     field.addCampo("Sexo",'c',1,'f');
-    baseDatos.newTable("Hola","Tabla prueba","11/22/33",field,0,1);
+    baseDatos.newTable("JUMM","Tabla prueba","11/22/33",field,0,1);
     Table_Fields field2;
     field2.addCampo("1Cuenta",'S',20,'t');
     field2.addCampo("1Cuenta2",'l',25,'f');
     field2.addCampo("1Cuenta3",'m',30,'f');
     field2.addCampo("1Cuenta4",'p',35,'t');
-    baseDatos.newTable("1Hola","Tabla prueba2","22/44/66",field2,1,2);
+    baseDatos.newTable("JUMMM1","Tabla prueba2","22/44/66",field2,1,2);
     Table_Fields field3;
     field3.addCampo("2Cuenta",'S',20,'f');
     field3.addCampo("2Cuenta2",'l',25,'t');
@@ -36,19 +36,12 @@ int main(int argc, char *argv[])
     field3.addCampo("2Cuenta4",'p',35,'f');
     baseDatos.newTable("2Hola","Tabla prueba3","33/66/99",field3,2,3);
 
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(0);
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(1);
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(2);
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(3);
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(4);
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(5);
-    qDebug()<<"DESPUES DE CREACION"<<baseDatos.bitsmap.bits->at(6);
     baseDatos.save();
     baseDatos.openDB(path);
     baseDatos.tables_control.openTable(0);
 
     qDebug()<<"LLEGO HATA ACA";
-    for(int i=0;i<50;i++){
+    for(int i=0;i<16480/2;i++){
         qDebug()<<"FOR ENTRADA"<<i;
         QList<QString> lista;
         QString temp;
@@ -59,14 +52,10 @@ int main(int argc, char *argv[])
         lista.push_back(temp);
         temp="Rubbo"+convert.setNum(i+1);
         lista.push_back(temp);
-        qDebug()<<"lala";
         char lolo=i+65;
         temp=QString(QChar(lolo));
-        qDebug()<<"lala1"<<temp;
         lista.push_back(temp);
-        qDebug()<<"lala2";
         baseDatos.tables_control.tableOpened->addRegister(lista);
-        qDebug()<<"lala3";
     }
     qDebug()<<"SALIO DE ACA";
     for(int i=0;i<20;i++){
@@ -86,26 +75,54 @@ int main(int argc, char *argv[])
         qDebug()<<"Sexo"<<c;
     }
     baseDatos.tables_control.tableOpened->addAllRegistersToFile();
+    qDebug()<<"SALVADA PRIMERA PARTE";
     baseDatos.tables_control.closeTable();
+    baseDatos.save();
 
-    for(int i=0;i<50;i++){
-        qDebug()<<baseDatos.tables_control.metaData.at(i).free<<i;
-        if(!baseDatos.tables_control.metaData.at(i).free){
-            qDebug()<<">>>>>TABLA INFO<<<<<";
-            qDebug()<<"-Nombre:"<<baseDatos.tables_control.metaData.at(i).nombre;
-            qDebug()<<"-Descrip: "<<baseDatos.tables_control.metaData.at(i).descrip;
-            qDebug()<<"-Fecha: "<<baseDatos.tables_control.metaData.at(i).fecha;
-            qDebug()<<"-key: "<<baseDatos.tables_control.metaData.at(i).primaryKey;
-            qDebug()<<"-secondary: "<<baseDatos.tables_control.metaData.at(i).secondaryIndex;
-            for(int e=0;e<baseDatos.tables_control.metaData.at(i).cant_camp;e++){
-                qDebug()<<">>>>>CAMPOS INFO<<<<<";
-                qDebug()<<"\t-Nombre:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).name;
-                qDebug()<<"\t-Tipo:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).type;
-                qDebug()<<"\t-Size:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).size;
-                qDebug()<<"\t-Nulo:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).nulo;
-            }
-        }
+    qDebug()<<"GRAN MITAD";
+    baseDatos.openDB(path);
+    baseDatos.tables_control.openTable(0);
+
+    for(int i=0;i<16480/2;i++){
+        qDebug()<<"FOR ENTRADA"<<i;
+        QList<QString> lista;
+        QString temp;
+        QString convert;
+        temp="100"+convert.setNum(i+1);
+        lista.push_back(temp);
+        temp="Devon"+convert.setNum(i+1);
+        lista.push_back(temp);
+        temp="Rubbo"+convert.setNum(i+1);
+        lista.push_back(temp);
+        char lolo=i+65;
+        temp=QString(QChar(lolo));
+        lista.push_back(temp);
+        baseDatos.tables_control.tableOpened->addRegister(lista);
     }
+    baseDatos.tables_control.tableOpened->addAllRegistersToFile();
+    qDebug()<<"SALVADA SEGUNDA PARTE";
+    baseDatos.tables_control.closeTable();
+    baseDatos.save();
+
+//    baseDatos.openDB(path);
+//    for(int i=0;i<50;i++){
+//        qDebug()<<baseDatos.tables_control.metaData.at(i).free<<i;
+//        if(!baseDatos.tables_control.metaData.at(i).free){
+//            qDebug()<<">>>>>TABLA INFO<<<<<";
+//            qDebug()<<"-Nombre:"<<baseDatos.tables_control.metaData.at(i).nombre;
+//            qDebug()<<"-Descrip: "<<baseDatos.tables_control.metaData.at(i).descrip;
+//            qDebug()<<"-Fecha: "<<baseDatos.tables_control.metaData.at(i).fecha;
+//            qDebug()<<"-key: "<<baseDatos.tables_control.metaData.at(i).primaryKey;
+//            qDebug()<<"-secondary: "<<baseDatos.tables_control.metaData.at(i).secondaryIndex;
+//            for(int e=0;e<baseDatos.tables_control.metaData.at(i).cant_camp;e++){
+//                qDebug()<<">>>>>CAMPOS INFO<<<<<";
+//                qDebug()<<"\t-Nombre:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).name;
+//                qDebug()<<"\t-Tipo:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).type;
+//                qDebug()<<"\t-Size:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).size;
+//                qDebug()<<"\t-Nulo:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).nulo;
+//            }
+//        }
+//    }
 
     return 0;
 }

@@ -6,11 +6,12 @@
 #include <metadatatable.h>
 #include <QDataStream>
 #include <header.h>
+#include <QStringList>
 
 class Table
 {
 public:
-    Table(int num,MetaDataTable &meta,Table_Fields cam);
+    Table(int num,MetaDataTable *meta,Table_Fields cam);
     void setBitsMap(QBitArray *bits);
     void setFile(QFile *file);
     void setHeader(Header &head);
@@ -20,9 +21,10 @@ public:
     int num_table;
     QList<QByteArray> StackRegisters;
     int addAllRegistersToFile();
+    QStringList getRegister(int num);
 private:
     Table_Fields listFields;
-    MetaDataTable metaData;
+    MetaDataTable *metaData;
     int registerCant;
     BitsMap bitsmap;
     QFile *fileOpened;
@@ -31,6 +33,9 @@ private:
     void fullBlockWithRegister(int blockNum);
     void creatListPointers(int blockNum);
     int addRegisterToFile(QByteArray info);
+    int stackRegisterCant;
+    int getPositionRegister(int num);
+    QStringList convertQByteToStringList(QByteArray array);
 };
 
 #endif // TABLE_H

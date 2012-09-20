@@ -13,7 +13,6 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     int pos=-1;
     for(int i=0;i<this->metaData.size();i++){
         if(this->metaData.at(i).free=='f'){
-            qDebug()<<"POSICION BIEN "<<i;
             pos=i;
             this->metaData[i].free='t';
             break;
@@ -25,8 +24,6 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     int b2=this->bitsmap.getBlockEmpty();
 
     qDebug()<<"OCUPADOS"<<b1<<b2;
-    qDebug()<<this->bitsmap.bits->at(b1);
-    qDebug()<<this->bitsmap.bits->at(b2);
     if(b1==-1)
         return 2;
     else if(b2==-1)
@@ -63,7 +60,7 @@ void Table_Control::saveTablesInfo(){
 }
 void Table_Control::openTable(int num){
     this->saveTablesInfo();
-    this->tableOpened=new Table(num,this->metaData[num],this->loadedFields[num]);
+    this->tableOpened=new Table(num,&this->metaData[num],this->loadedFields[num]);
     this->tableOpened->setBitsMap(this->bitsmap.bits);
     this->tableOpened->setFile(this->fileOpened);
     this->tableOpened->setHeader(this->header);
@@ -82,22 +79,26 @@ void Table_Control::createFirstDirectsData(int pos){
         bytes.fill('\0',temp.RegisterSize);
         block.append(bytes);
         int num=i+1;
-        qDebug()<<"FIRST DIRECT"<<num<<registerCant<<temp.RegisterSize;
         block.append(reinterpret_cast<char*>(&num),sizeof(int));
         this->fileOpened->write(block);
     }
 }
 void Table_Control::setFile(QFile *f){
     this->fileOpened=f;
+    this->bitsmap.setFile(f);
 }
 void Table_Control::setHeader(Header &h){
     this->header=h;
 }
 void Table_Control::closeTable(){
     this->bitsmap.writeBitsMap();
+    qDebug()<<"Si pasa";
     this->writeMetaDataTable(this->tableOpened->num_table);
+    qDebug()<<"Pasara";
 }
 void Table_Control::writeMetaDataTable(int num){
+    qDebug()<<"METADATA A GUARDAR"<<this->metaData.at(num).nombre<<this->header.start_metaData+(num*sizeof(MetaDataTable));
+    qDebug()<<"Values"<<this->metaData.at(num).nextDataFree;
     this->fileOpened->seek(this->header.start_metaData+(num*sizeof(MetaDataTable)));
     this->fileOpened->write(reinterpret_cast<char*>(&this->metaData[num]),sizeof(MetaDataTable));
 }

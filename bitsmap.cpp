@@ -6,7 +6,8 @@ BitsMap::BitsMap()
 QByteArray BitsMap::convertBitToByte(QBitArray *array){
     QByteArray temp;
     temp.resize(array->count()/8);
-    for(int b=0; b<array->count(); b++)
+    temp.fill(0);
+    for(int b=0; b<array->count(); ++b)
         temp[b/8] = ( temp.at(b/8) | ((array->at(b)?1:0)<<(b%8)));
     return temp;
 }
@@ -86,17 +87,15 @@ void BitsMap::assignByteArray(QByteArray &array){
 }
 
 void BitsMap::writeBitsMap(){
+    qDebug()<<"Escribir BitsMap";
+    qDebug()<<sizeof(Header);
+    qDebug()<<"Abierto"<<this->fileOpened->isOpen();
     this->fileOpened->seek(sizeof(Header));
-    qDebug()<<this->bits->at(0);
-    qDebug()<<this->bits->at(1);
-    qDebug()<<this->bits->at(2);
-    qDebug()<<this->bits->at(3);
-    qDebug()<<this->bits->at(4);
-    qDebug()<<this->bits->at(5);
-    qDebug()<<this->bits->at(6);
+    qDebug()<<"Posicionando";
     this->bytes=this->convertBitToByte(this->bits);
-    this->fileOpened->write(bytes);
-    qDebug()<<fileOpened->pos();
+    qDebug()<<"Convertido bytes";
+    qDebug()<<"TAMAÑO"<<this->bytes.count();
+    this->fileOpened->write(this->bytes);
 }
 void BitsMap::setFile(QFile *file){
     this->fileOpened=file;

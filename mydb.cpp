@@ -26,7 +26,7 @@ int MyDB::createDB(int tamanio, QString path){
     qDebug()<<"relleno MetaData"<<this->header.rellenoMetadata;
     this->header.all_Header_size=sizeof(Header)+this->header.sizeBitsMap+this->header.size_metaData;
     archivo.write(reinterpret_cast<char*>(&this->header),sizeof(Header));
-    QByteArray array(this->header.sizeBitsMap,'\0');
+    QByteArray array(this->header.sizeBitsMap,'\0');    
     archivo.write(array);
     for(int i=0;i<50;i++){
         MetaDataTable metadat;
@@ -54,14 +54,7 @@ bool MyDB::openDB(QString path){
     qDebug()<<this->header.authors;
     this->FileOpened.read(reinterpret_cast<char*>(&this->header),sizeof(Header));
     QByteArray bytes=this->FileOpened.read(this->header.sizeBitsMap);
-    qDebug()<<bytes.count();
     this->bitsmap.setBitArray((this->bitsmap.convertByteToBit(bytes)));
-    qDebug()<<this->bitsmap.bits->at(0);
-    qDebug()<<this->bitsmap.bits->at(2);
-    qDebug()<<this->bitsmap.bits->at(3);
-    qDebug()<<this->bitsmap.bits->at(4);
-    qDebug()<<this->bitsmap.bits->at(5);
-    qDebug()<<this->bitsmap.bits->at(6);
     this->tables_control.clearAll();
     for(int i=0;i<50;i++){
         MetaDataTable temps;
