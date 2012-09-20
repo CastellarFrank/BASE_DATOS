@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         lista.push_back(temp);
         temp="Rubbo"+convert.setNum(i+1);
         lista.push_back(temp);
-        char lolo=(i%255);
+        char lolo=(i-8155);
         temp=QString(QChar(lolo));
         lista.push_back(temp);
         baseDatos.tables_control.tableOpened->addRegister(lista);
@@ -88,11 +88,11 @@ int main(int argc, char *argv[])
         QList<QString> lista;
         QString temp;
         QString convert;
-        temp="100"+convert.setNum(i+1);
+        temp="100"+convert.setNum(i+8241);
         lista.push_back(temp);
-        temp="Devon"+convert.setNum(i+1);
+        temp="Devon"+convert.setNum(i+8241);
         lista.push_back(temp);
-        temp="Rubbo"+convert.setNum(i+1);
+        temp="Rubbo"+convert.setNum(i+8241);
         lista.push_back(temp);
         char lolo=i+65;
         temp=QString(QChar(lolo));
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
     baseDatos.tables_control.tableOpened->addAllRegistersToFile();
     qDebug()<<"SALVADA SEGUNDA PARTE";
 
-    for(int i=0;i<20;i++){
-        qDebug()<<"Mostraado Registro #"<<i;
+    for(int i=8220;i<8300;i++){
+        qDebug()<<"Mostrando Registro #"<<i;
         QStringList tempList=baseDatos.tables_control.tableOpened->getRegister(i);
         for(int i=0;i<tempList.count();i++){
             qDebug()<<"\t"<<tempList.at(i);

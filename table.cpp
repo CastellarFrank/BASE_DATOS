@@ -297,7 +297,7 @@ int Table::getPositionRegister(int num){
             if(this->metaData->pointersData.no_directN11==-1)
                 return -1;
             int pos=this->header.all_Header_size+
-                    (this->metaData->pointersData.no_directN10*1024)+
+                    (this->metaData->pointersData.no_directN11*1024)+
                     ((file-3-(nfile*(1024/sizeof(int))))*sizeof(int));
             this->fileOpened->seek(pos);
             int numTemp;
@@ -324,8 +324,7 @@ int Table::getPositionRegister(int num){
             pointerToFile=numTemp;
         }
     }
-    if(pointerToFile==-1)
-        return -1;
+    qDebug()<<"Bloque de registros"<<pointerToFile;
     return this->header.all_Header_size+(pointerToFile*1024)+
             ((num-(file*this->registerCant))*
             (this->metaData->register_size+sizeof(int)));
