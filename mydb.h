@@ -26,7 +26,8 @@ public:
     Table_Control tables_control;
     int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
     BitsMap bitsmap;
-    void save();
+    void closeDB();
+
 private:
     QString getNameWithoutExtention(QString path);
     Header header;
@@ -35,6 +36,7 @@ private:
     void rellenar(int val,QFile &file);
     int getByteSize(int BlocksCant);
     void writeHeader();
+    void save();
 };
 
 #endif // MYDB_H

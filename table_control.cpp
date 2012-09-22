@@ -20,10 +20,10 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     }
     if(pos==-1)
         return 1;
+    qDebug()<<"\t#Creando Tabla#"<<"Name:"<<name<<"Num:"<<pos;
     int b1=this->bitsmap.getBlockEmpty();
     int b2=this->bitsmap.getBlockEmpty();
 
-    qDebug()<<"OCUPADOS"<<b1<<b2;
     if(b1==-1)
         return 2;
     else if(b2==-1)
@@ -43,22 +43,20 @@ int Table_Control::crearTable(QString name, QString descrip, QString fecha, Tabl
     return 0;
 }
 void Table_Control::saveTablesInfo(){
-    qDebug()<<"Cantidad campo to save:"<<this->campos.count();
     QMap<int,Table_Fields>::ConstIterator it;
     for(it=this->campos.constBegin();it!=this->campos.constEnd();it++){
         this->loadedFields[it.key()]=it.value();
         this->writeMetaDataTable(it.key());
         Table_Fields tempField=it.value();
         this->fileOpened->seek(this->header.all_Header_size+this->metaData.at(it.key()).pointerToFields*1024);
-        qDebug()<<this->fileOpened->pos();
         for(int i=0;i<tempField.campos.count();i++){
-            qDebug()<<tempField.campos[i].name<<i<<this->header.all_Header_size+this->metaData.at(it.key()).pointerToFields*1024+(i*sizeof(Field))<<it.key()<<this->metaData.at(it.key()).pointerToFields*1024;
             this->fileOpened->write(reinterpret_cast<char*>(&tempField.campos[i]),sizeof(Field));
         }
     }
     this->campos.clear();
 }
 void Table_Control::openTable(int num){
+    qDebug()<<"#ABRIENDO TABLA#"<<"Name:"<<this->metaData[num].nombre<<"Num:"<<num;
     this->saveTablesInfo();
     this->tableOpened=new Table(num,&this->metaData[num],this->loadedFields[num]);
     this->tableOpened->setBitsMap(this->bitsmap.bits);
@@ -91,14 +89,13 @@ void Table_Control::setHeader(Header &h){
     this->header=h;
 }
 void Table_Control::closeTable(){
+    qDebug()<<"#CERRANDO TABLA#"<<"Name:"<<this->metaData[this->tableOpened->num_table].nombre<<"Num:"<<this->tableOpened->num_table;
+    qDebug()<<"\t#Guardando Información de la tabla abierta#";
     this->bitsmap.writeBitsMap();
-    qDebug()<<"Si pasa";
     this->writeMetaDataTable(this->tableOpened->num_table);
-    qDebug()<<"Pasara";
+    delete this->tableOpened;
 }
 void Table_Control::writeMetaDataTable(int num){
-    qDebug()<<"METADATA A GUARDAR"<<this->metaData.at(num).nombre<<this->header.start_metaData+(num*sizeof(MetaDataTable));
-    qDebug()<<"Values"<<this->metaData.at(num).nextDataFree;
     this->fileOpened->seek(this->header.start_metaData+(num*sizeof(MetaDataTable)));
     this->fileOpened->write(reinterpret_cast<char*>(&this->metaData[num]),sizeof(MetaDataTable));
 }

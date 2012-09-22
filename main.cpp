@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QList>
 #include <QString>
+#include <stdlib.h>
+#include <time.h>
+
 
 int main(int argc, char *argv[])
 {
@@ -12,37 +15,47 @@ int main(int argc, char *argv[])
     MainWindow w;
     //w.show();
     MyDB baseDatos;
-    QString path=QFileDialog::getSaveFileName(0,"Lala");
+    QString path=QFileDialog::getSaveFileName(0,"Guardar Base de Datos");
+    //CREANDO BASE DE DATOS
     baseDatos.createDB(100,path);
-    path=QFileDialog::getOpenFileName(0,"Lolo");
+
+    path=QFileDialog::getOpenFileName(0,"Abrir Base de Datos");
+    //ABRIENDO BASE DE DATOS
     baseDatos.openDB(path);
 
+    qDebug()<<"#CREANDO TABLAS#";
     Table_Fields field;
     field.addCampo("Cuenta",'i',4,'f');
     field.addCampo("Nombre",'s',25,'f');
     field.addCampo("Apellido",'s',30,'f');
     field.addCampo("Sexo",'c',1,'f');
-    baseDatos.newTable("JUMM","Tabla prueba","11/22/33",field,0,1);
-    Table_Fields field2;
-    field2.addCampo("1Cuenta",'S',20,'t');
-    field2.addCampo("1Cuenta2",'l',25,'f');
-    field2.addCampo("1Cuenta3",'m',30,'f');
-    field2.addCampo("1Cuenta4",'p',35,'t');
-    baseDatos.newTable("JUMMM1","Tabla prueba2","22/44/66",field2,1,2);
+    baseDatos.newTable("Tabla Prueba 1","Descripción Tabla prueba1","11/22/33",field,0,1);
+
+    Table_Fields field2;    
+    field2.addCampo("Nombre",'s',25,'t');
+    field2.addCampo("Cuenta",'i',4,'f');
+    field2.addCampo("Sexo",'c',1,'f');
+    field2.addCampo("Apellido",'s',30,'t');
+    baseDatos.newTable("Table Prueba 2","Descripción Tabla prueba2","22/44/66",field2,1,2);
+
     Table_Fields field3;
     field3.addCampo("2Cuenta",'S',20,'f');
     field3.addCampo("2Cuenta2",'l',25,'t');
     field3.addCampo("2Cuenta3",'m',30,'t');
     field3.addCampo("2Cuenta4",'p',35,'f');
-    baseDatos.newTable("2Hola","Tabla prueba3","33/66/99",field3,2,3);
+    baseDatos.newTable("Table Prueba 3","Descripción Tabla prueba3","33/66/99",field3,2,3);
 
-    baseDatos.save();
+    //CERRANDO BASE DE DATOS
+    baseDatos.closeDB();
+
+    //ABRIENDO DE NUEVO LA BASE DE DATOS
     baseDatos.openDB(path);
+
+    //ABRIENDO LA TABLA NUMERO 1 (LA PRIMERA)
     baseDatos.tables_control.openTable(0);
 
-    qDebug()<<"LLEGO HATA ACA";
-    for(int i=0;i<16480/2;i++){
-        qDebug()<<"FOR ENTRADA"<<i;
+    qDebug()<<"#CREANDO 10000 REGISTROS E INGRESANDOLOS EN MEMORIA PARA LA TABLA 1#";
+    for(int i=0;i<10000;i++){
         QList<QString> lista;
         QString temp;
         QString convert;
@@ -52,85 +65,84 @@ int main(int argc, char *argv[])
         lista.push_back(temp);
         temp="Rubbo"+convert.setNum(i+1);
         lista.push_back(temp);
-        char lolo=(i-8155);
+        char lolo=(i%100);
         temp=QString(QChar(lolo));
         lista.push_back(temp);
         baseDatos.tables_control.tableOpened->addRegister(lista);
     }
-    qDebug()<<"SALIO DE ACA";
-    for(int i=0;i<20;i++){
-        QByteArray array=baseDatos.tables_control.tableOpened->StackRegisters[i];
-        int first;
-        memcpy(&first,array,sizeof(int));
-        array.remove(0,4);
-        QByteArray second=array.left(25);
-        array.remove(0,25);
-        QByteArray thirth=array.left(30);
-        array.remove(0,30);
-        char c;
-        memcpy(&c,array,1);
-        qDebug()<<"Cuenta"<<first;
-        qDebug()<<"Nombre"<<second;
-        qDebug()<<"Apellido"<<thirth;
-        qDebug()<<"Sexo"<<c;
-    }
+
+    qDebug()<<"#GUARDANDO LOS REGISTROS DE LA MEMORIA AL ARCHIVO#";
     baseDatos.tables_control.tableOpened->addAllRegistersToFile();
-    qDebug()<<"SALVADA PRIMERA PARTE";
+
+    //CERRANDO TABLA
     baseDatos.tables_control.closeTable();
-    baseDatos.save();
 
-    qDebug()<<"GRAN MITAD";
-    baseDatos.openDB(path);
-    baseDatos.tables_control.openTable(0);
 
-    for(int i=0;i<16480/2;i++){
-        qDebug()<<"FOR ENTRADA"<<i;
+    //ABRIENDO LA TABLA #2
+    baseDatos.tables_control.openTable(1);
+
+    qDebug()<<"#CREANDO 10000 REGISTROS E INGRESANDOLOS EN MEMORIA PARA LA TABLA 2#";
+    for(int i=0;i<10000;i++){
         QList<QString> lista;
         QString temp;
         QString convert;
-        temp="100"+convert.setNum(i+8241);
+        temp="Grecia"+convert.setNum(i+1);
         lista.push_back(temp);
-        temp="Devon"+convert.setNum(i+8241);
+        temp="100"+convert.setNum(i+1);
         lista.push_back(temp);
-        temp="Rubbo"+convert.setNum(i+8241);
-        lista.push_back(temp);
-        char lolo=i+65;
+        char lolo=(i%100);
         temp=QString(QChar(lolo));
+        lista.push_back(temp);
+        temp="Larrama"+convert.setNum(i+1);
         lista.push_back(temp);
         baseDatos.tables_control.tableOpened->addRegister(lista);
     }
+    qDebug()<<"#GUARDANDO LOS REGISTROS DE LA MEMORIA AL ARCHIVO#";
     baseDatos.tables_control.tableOpened->addAllRegistersToFile();
-    qDebug()<<"SALVADA SEGUNDA PARTE";
 
-    for(int i=8220;i<8300;i++){
-        qDebug()<<"Mostrando Registro #"<<i;
-        QStringList tempList=baseDatos.tables_control.tableOpened->getRegister(i);
-        for(int i=0;i<tempList.count();i++){
-            qDebug()<<"\t"<<tempList.at(i);
+    //CERRANDO TABLA
+    baseDatos.tables_control.closeTable();
+
+    //CERRANDO BASE DE DATOS
+    baseDatos.closeDB();
+
+    //ABRIENDO BASE DE DATOS
+    baseDatos.openDB(path);
+
+    //ABRIENDO TABLA #1
+    baseDatos.tables_control.openTable(0);
+
+    qDebug()<<"#MOSTRANDO 100 REGISTROS AL AZAR TABLA N°1#";
+    srand(time(NULL));
+    for(int i=0;i<100;i++){
+        int azar=(rand()%10000);
+        qDebug()<<"Mostrando Registro #"<<azar;
+        QStringList tempList=baseDatos.tables_control.tableOpened->getRegister(azar);
+        for(int e=0;e<tempList.count();e++){
+            qDebug()<<"\t"<<tempList.at(e);
         }
     }
-    baseDatos.tables_control.closeTable();
-    baseDatos.save();
 
-//    baseDatos.openDB(path);
-//    for(int i=0;i<50;i++){
-//        qDebug()<<baseDatos.tables_control.metaData.at(i).free<<i;
-//        if(!baseDatos.tables_control.metaData.at(i).free){
-//            qDebug()<<">>>>>TABLA INFO<<<<<";
-//            qDebug()<<"-Nombre:"<<baseDatos.tables_control.metaData.at(i).nombre;
-//            qDebug()<<"-Descrip: "<<baseDatos.tables_control.metaData.at(i).descrip;
-//            qDebug()<<"-Fecha: "<<baseDatos.tables_control.metaData.at(i).fecha;
-//            qDebug()<<"-key: "<<baseDatos.tables_control.metaData.at(i).primaryKey;
-//            qDebug()<<"-secondary: "<<baseDatos.tables_control.metaData.at(i).secondaryIndex;
-//            for(int e=0;e<baseDatos.tables_control.metaData.at(i).cant_camp;e++){
-//                qDebug()<<">>>>>CAMPOS INFO<<<<<";
-//                qDebug()<<"\t-Nombre:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).name;
-//                qDebug()<<"\t-Tipo:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).type;
-//                qDebug()<<"\t-Size:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).size;
-//                qDebug()<<"\t-Nulo:"<<baseDatos.tables_control.loadedFields.at(i).campos.at(e).nulo;
-//            }
-//        }
-//    }
+    //CERRANDO TABLA #1
+    baseDatos.tables_control.closeTable();
+
+    //ABRIENDO TABLA #2
+    baseDatos.tables_control.openTable(1);
+
+    qDebug()<<"#MOSTRANDO 100 REGISTROS AL AZAR TABLA N°2#";
+    for(int i=0;i<100;i++){
+        int azar=(rand()%10000);
+        qDebug()<<"Mostrando Registro #"<<azar;
+        QStringList tempList=baseDatos.tables_control.tableOpened->getRegister(azar);
+        for(int e=0;e<tempList.count();e++){
+            qDebug()<<"\t"<<tempList.at(e);
+        }
+    }
+    //CERRANDO TABLA
+    baseDatos.tables_control.closeTable();
+
+    //CERRANDO BASE DE DATOS
+    baseDatos.closeDB();
 
     return 0;
 }

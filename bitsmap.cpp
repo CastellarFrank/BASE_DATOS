@@ -64,7 +64,6 @@ int BitsMap::getBlockEmpty(){
     for(int i=0;i<this->bits->size();i++){
         if(!this->bits->at(i)){
             this->bits->setBit(i,true);
-            qDebug()<<"SE PIDIO BLOQUE"<<i;
             return i;
         }
     }
@@ -87,14 +86,8 @@ void BitsMap::assignByteArray(QByteArray &array){
 }
 
 void BitsMap::writeBitsMap(){
-    qDebug()<<"Escribir BitsMap";
-    qDebug()<<sizeof(Header);
-    qDebug()<<"Abierto"<<this->fileOpened->isOpen();
     this->fileOpened->seek(sizeof(Header));
-    qDebug()<<"Posicionando";
     this->bytes=this->convertBitToByte(this->bits);
-    qDebug()<<"Convertido bytes";
-    qDebug()<<"TAMAÑO"<<this->bytes.count();
     this->fileOpened->write(this->bytes);
 }
 void BitsMap::setFile(QFile *file){

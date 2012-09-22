@@ -14,12 +14,10 @@ void Table::setBitsMap(QBitArray *bits){
 }
 
 int Table::addRegisterToFile(QByteArray info){
-    qDebug()<<"ADDING REGISTER"<<metaData->nextDataFree<<this->metaData->register_size;
     int tempV=this->metaData->nextDataFree/this->registerCant;
     int writeDirection=this->getBytesPositionToWriteRegister(tempV);
     if(writeDirection==-1 || writeDirection==-2)
         return writeDirection;
-    qDebug()<<"Dirección a escribir"<<writeDirection;
     this->fileOpened->seek(writeDirection+this->metaData->register_size);
     int num;
     this->fileOpened->read(reinterpret_cast<char*>(&num),sizeof(int));
@@ -39,17 +37,14 @@ int Table::getBytesPositionToWriteRegister(int val){
     bool nuevo=true;
     int pointer;
     int iFile;
-    qDebug()<<"Archivo #"<<val;
     if(val==0){
         nuevo=false;
         pointer=this->metaData->pointersData.direct1;
-        qDebug()<<"Apuntador del bloque"<<pointer;
     }else if(val==1){
         if(this->metaData->pointersData.direct2==-1){
             int pointValue=this->bitsmap.getBlockEmpty();
             if(pointValue==-1)
                 return -1;
-            qDebug()<<"NUEVO"<<pointValue;
             this->metaData->pointersData.direct2=pointValue;
         }else{
             nuevo=false;
@@ -67,14 +62,12 @@ int Table::getBytesPositionToWriteRegister(int val){
         pointer=this->metaData->pointersData.direct3;
     }else{
         iFile=(val-3)/(1024/sizeof(int));
-        qDebug()<<"Archivo no-directo"<<iFile;
         if(iFile==0){
             if(this->metaData->pointersData.no_directN10==-1){
                 int pointValue=this->bitsmap.getBlockEmpty();
                 if(pointValue==-1)
                     return -1;
                 this->metaData->pointersData.no_directN10=pointValue;
-                qDebug()<<"Nuevo Pointer to Pointers"<<pointValue;
                 this->creatListPointers(this->metaData->pointersData.no_directN10);
             }
             int pos=this->header.all_Header_size+
@@ -84,7 +77,6 @@ int Table::getBytesPositionToWriteRegister(int val){
             this->fileOpened->seek(pos);
             int tempN;
             this->fileOpened->read(reinterpret_cast<char*>(&tempN),sizeof(int));
-            qDebug()<<"Validando Pointer nulo"<<tempN;
             if(tempN==-1){
                 tempN=this->bitsmap.getBlockEmpty();
                 if(tempN==-1)
@@ -101,7 +93,6 @@ int Table::getBytesPositionToWriteRegister(int val){
                 if(pointValue==-1)
                     return -1;
                 this->metaData->pointersData.no_directN11=pointValue;
-                qDebug()<<"Nuevo Pointer to Pointers"<<pointValue;
                 this->creatListPointers(this->metaData->pointersData.no_directN11);
             }
             int pos=this->header.all_Header_size+
@@ -110,7 +101,6 @@ int Table::getBytesPositionToWriteRegister(int val){
             this->fileOpened->seek(pos);
             int tempN;
             this->fileOpened->read(reinterpret_cast<char*>(&tempN),sizeof(int));
-            qDebug()<<"Validando Pointer nulo"<<tempN;
             if(tempN==-1){
                 tempN=this->bitsmap.getBlockEmpty();
                 if(tempN==-1)
@@ -122,7 +112,6 @@ int Table::getBytesPositionToWriteRegister(int val){
             }
             pointer=tempN;
         }else{
-            qDebug()<<"Archivo no directo"<<(iFile-2)<<"Mayor"<<255;
             if((iFile-2)>=(1024/sizeof(int)))
                 return -2;
             if(this->metaData->pointersData.no_directN2==-1){
@@ -130,7 +119,6 @@ int Table::getBytesPositionToWriteRegister(int val){
                 if(pointValue==-1)
                     return -1;
                 this->metaData->pointersData.no_directN2=pointValue;
-                qDebug()<<"Creando no directo 2nivel"<<pointValue;
                 this->creatListPointers(pointValue);
             }
             int pos=this->header.all_Header_size+
@@ -145,7 +133,6 @@ int Table::getBytesPositionToWriteRegister(int val){
                     return -1;
                 this->fileOpened->seek(pos);
                 this->fileOpened->write(reinterpret_cast<char*>(&tempN),sizeof(int));
-                qDebug()<<"Creando no directo"<<tempN;
                 this->creatListPointers(tempN);
             }
             pos=this->header.all_Header_size+
@@ -166,12 +153,8 @@ int Table::getBytesPositionToWriteRegister(int val){
         }
     }
     if(nuevo){
-        qDebug()<<"Pointer NUEVO"<<pointer;
         this->fullBlockWithRegister(pointer);
     }
-
-    qDebug()<<"Salida"<<header.all_Header_size<<pointer*1024<<((this->metaData->nextDataFree-(val*this->registerCant)))<<(this->listFields.RegisterSize+sizeof(int))<<((this->metaData->nextDataFree-(val*this->registerCant))*(this->listFields.RegisterSize+sizeof(int)));
-
     return this->header.all_Header_size+(pointer*1024)+
             ((this->metaData->nextDataFree-(val*this->registerCant))*
             (this->metaData->register_size+sizeof(int)));
@@ -188,7 +171,6 @@ void Table::fullBlockWithRegister(int blockNum){
         bytes.fill('\0',this->metaData->register_size);
         block.append(bytes);
         int num=i+1+this->metaData->nextDataFree;
-        qDebug()<<"NUMERO NEXT"<<num;
         block.append(reinterpret_cast<char*>(&num),sizeof(int));
         this->fileOpened->write(block);
     }
@@ -207,7 +189,6 @@ int Table::addAllRegistersToFile(){
         this->addRegisterToFile(this->StackRegisters[i]);
     }
     this->metaData->register_cant=this->stackRegisterCant;
-    qDebug()<<"Registros añadidos"<<this->metaData->register_cant;
 }
 int Table::addRegister(QList<QString> Regis){
         int temp=this->canAddRegister();
@@ -241,14 +222,12 @@ QByteArray Table::joinToMe(QList<QString> list){
             }
         }else if(this->listFields.campos.at(i).type=='i'){
             int val=list[i].toInt();
-            qDebug()<<"Numero"<<val;
             temp.append(reinterpret_cast<char*>(&val),sizeof(int));
         }else if(this->listFields.campos.at(i).type=='f'){
             float val=list[i].toFloat();
             temp.append(reinterpret_cast<char*>(&val),sizeof(float));
         }else if(this->listFields.campos.at(i).type=='c'){
             char val=list[i].at(0).toAscii();
-            qDebug()<<"CARACTER"<<val;
             temp.append(reinterpret_cast<char*>(&val),sizeof(char));
         }else if(this->listFields.campos.at(i).type=='d'){
             temp.append(list[i]);
@@ -324,7 +303,6 @@ int Table::getPositionRegister(int num){
             pointerToFile=numTemp;
         }
     }
-    qDebug()<<"Bloque de registros"<<pointerToFile;
     return this->header.all_Header_size+(pointerToFile*1024)+
             ((num-(file*this->registerCant))*
             (this->metaData->register_size+sizeof(int)));
@@ -366,3 +344,4 @@ QStringList Table::convertQByteToStringList(QByteArray array){
     }
     return temp;
 }
+
