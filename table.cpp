@@ -568,9 +568,10 @@ int Table::inserValueAtTheTree(int rrn, keyTree key, int *promo_r_child, keyTree
     }
     qDebug()<<"\t#Read NODOTREE put into page#"<<rrn;
     page=this->getNodoTree(rrn);
-    founded=this->search_node(key,&page,&pos);
+    founded=this->searchValueIntoAnArray(page.keys,key.value,page.keyCount,pos);
+    //founded=this->search_node(key,&page,&pos);
     qDebug()<<"\t#Searching key into page#"<<key.value<<key.pointer<<"Pos:"<<pos;
-    if(founded==1){
+    if(founded==0){
         qDebug()<<"\t#Key duplicated#"<<"#Error#";
         return 2;
     }
