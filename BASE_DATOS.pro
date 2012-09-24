@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     field.cpp \
     table_control.cpp \
     table_fields.cpp \
-    table.cpp
+    table.cpp \
+    keytree.cpp \
+    nodotree.cpp
 
 HEADERS  += mainwindow.h \
     mydb.h \
@@ -31,6 +33,8 @@ HEADERS  += mainwindow.h \
     field.h \
     table_control.h \
     table_fields.h \
-    table.h
+    table.h \
+    keytree.h \
+    nodotree.h
 
 FORMS    += mainwindow.ui

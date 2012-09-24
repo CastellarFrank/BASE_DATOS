@@ -27,12 +27,12 @@ public:
     int newTable(QString name, QString descrip, QString fecha, Table_Fields Field, int key, int second);
     BitsMap bitsmap;
     void closeDB();
+    QFile FileOpened;
 
 private:
     QString getNameWithoutExtention(QString path);
     Header header;
     int getBlockCant(int totalBytes,int divisorBytes);
-    QFile FileOpened;
     void rellenar(int val,QFile &file);
     int getByteSize(int BlocksCant);
     void writeHeader();

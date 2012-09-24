@@ -93,3 +93,13 @@ void BitsMap::writeBitsMap(){
 void BitsMap::setFile(QFile *file){
     this->fileOpened=file;
 }
+bool BitsMap::avaibleBlockCant(int cant){
+    for(int i=0;i<this->bits->count()&& cant>0;i++){
+        if(!this->bits->at(i))
+            cant--;
+    }
+    if(cant==0)
+        return true;
+    else
+        return false;
+}

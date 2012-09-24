@@ -28,6 +28,8 @@ public:
     int getBlockEmpty(); //Retorna una posición libre del bitsmap o sino hay retorna -1
     void writeBitsMap();
     void setFile(QFile *file);
+    bool avaibleBlockCant(int cant);
+
     QBitArray *bits; //Arreglo QBit interno
 
 private:

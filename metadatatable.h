@@ -18,7 +18,7 @@ public:
     char free;
     int pointerToFields;
     int nextDataFree;
-
+    int treeStart;
     Table_Pointers pointersData;
     Table_Pointers pointerArbolB;
     Table_Pointers pointerIS;
